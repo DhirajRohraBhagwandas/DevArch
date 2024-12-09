@@ -1,0 +1,153 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function prototypes
+void insertAtEnd(struct Node** head, int value);
+void insertAtBeginning(struct Node** head, int value);
+void displayList(struct Node* head);
+void deleteNode(struct Node** head, int value);
+
+int main() {
+    struct Node* head = NULL; // Initialize the head of the circular list
+    int choice, value;
+
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Insert at end\n");
+        printf("2. Insert at beginning\n");
+        printf("3. Display list\n");
+        printf("4. Delete a node\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the value to insert at the end: ");
+                scanf("%d", &value);
+                insertAtEnd(&head, value);
+                break;
+            case 2:
+                printf("Enter the value to insert at the beginning: ");
+                scanf("%d", &value);
+                insertAtBeginning(&head, value);
+                break;
+            case 3:
+                printf("The list is: ");
+                displayList(head);
+                break;
+            case 4:
+                printf("Enter the value to delete: ");
+                scanf("%d", &value);
+                deleteNode(&head, value);
+                break;
+            case 5:
+                printf("Exiting...\n");
+                exit(0);
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}
+
+// Function to insert a node at the end of the circular list
+void insertAtEnd(struct Node** head, int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* temp = *head;
+    newNode->data = value;
+    newNode->next = newNode; // New node points to itself (for single node case)
+
+    if (*head == NULL) {
+        *head = newNode; // For the first node
+    } else {
+        while (temp->next != *head) { // Traverse to the last node
+            temp = temp->next;
+        }
+        temp->next = newNode; // Link the last node to the new node
+        newNode->next = *head; // Link the new node to the head
+    }
+}
+
+// Function to insert a node at the beginning of the circular list
+void insertAtBeginning(struct Node** head, int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* temp = *head;
+    newNode->data = value;
+
+    if (*head == NULL) {
+        newNode->next = newNode; // New node points to itself
+        *head = newNode;
+    } else {
+        while (temp->next != *head) { // Traverse to the last node
+            temp = temp->next;
+        }
+        newNode->next = *head; // New node points to the current head
+        temp->next = newNode; // Last node points to the new node
+        *head = newNode; // Update head to the new node
+    }
+}
+
+// Function to display the circular list
+void displayList(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct Node* temp = head;
+    do {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+    printf("(back to head)\n");
+}
+
+// Function to delete a node with a given value
+void deleteNode(struct Node** head, int value) {
+    if (*head == NULL) {
+        printf("List is empty. Cannot delete.\n");
+        return;
+    }
+
+    struct Node *temp = *head, *prev = NULL;
+
+    // Case 1: If the node to be deleted is the head
+    if ((*head)->data == value) {
+        if ((*head)->next == *head) {
+            // If only one node in the list
+            free(*head);
+            *head = NULL;
+        } else {
+            while (temp->next != *head) { // Traverse to the last node
+                temp = temp->next;
+            }
+            temp->next = (*head)->next; // Last node points to the second node
+            free(*head);
+            *head = temp->next; // Update head
+        }
+        printf("Node deleted.\n");
+        return;
+    }
+
+    // Case 2: Deleting a node that is not the head
+    while (temp->next != *head && temp->data != value) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp->data == value) {
+        prev->next = temp->next;
+        free(temp);
+        printf("Node deleted.\n");
+    } else {
+        printf("Value not found in the list.\n");
+    }
+}

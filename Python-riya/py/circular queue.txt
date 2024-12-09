@@ -1,0 +1,134 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 5  // Maximum size of the circular queue
+
+// Circular Queue structure
+struct CircularQueue {
+    int arr[MAX];
+    int front;
+    int rear;
+};
+
+// Function to initialize the queue
+void initQueue(struct CircularQueue* queue) {
+    queue->front = -1;
+    queue->rear = -1;
+}
+
+// Function to check if the queue is full
+int isFull(struct CircularQueue* queue) {
+    return ((queue->rear + 1) % MAX == queue->front);
+}
+
+// Function to check if the queue is empty
+int isEmpty(struct CircularQueue* queue) {
+    return (queue->front == -1);
+}
+
+// Function to enqueue (add an element) into the circular queue
+void enqueue(struct CircularQueue* queue, int value) {
+    if (isFull(queue)) {
+        printf("Queue Overflow! Cannot enqueue %d\n", value);
+    } else {
+        if (queue->front == -1) {
+            queue->front = 0;  // First element
+        }
+        queue->rear = (queue->rear + 1) % MAX;  // Move rear to next position circularly
+        queue->arr[queue->rear] = value;
+        printf("Enqueued %d into the queue\n", value);
+    }
+}
+
+// Function to dequeue (remove an element) from the circular queue
+int dequeue(struct CircularQueue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue Underflow! Queue is empty.\n");
+        return -1;  // Return -1 to indicate an error
+    } else {
+        int dequeuedValue = queue->arr[queue->front];
+        if (queue->front == queue->rear) {
+            // Queue has only one element, reset the queue
+            queue->front = queue->rear = -1;
+        } else {
+            queue->front = (queue->front + 1) % MAX;  // Move front to next position circularly
+        }
+        return dequeuedValue;
+    }
+}
+
+// Function to peek (look at the front element) without removing it
+int peek(struct CircularQueue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty. No element to peek.\n");
+        return -1;  // Return -1 to indicate an error
+    } else {
+        return queue->arr[queue->front];
+    }
+}
+
+// Function to display all elements in the circular queue
+void display(struct CircularQueue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty.\n");
+    } else {
+        printf("Queue elements: ");
+        int i = queue->front;
+        while (i != queue->rear) {
+            printf("%d ", queue->arr[i]);
+            i = (i + 1) % MAX;
+        }
+        printf("%d\n", queue->arr[queue->rear]);  // Print the rear element
+    }
+}
+
+// Main function with the menu-driven interface
+int main() {
+    struct CircularQueue queue;
+    int choice, value;
+
+    // Initialize the queue
+    initQueue(&queue);
+
+    do {
+        // Menu options
+        printf("\nCircular Queue Menu:\n");
+        printf("1. Enqueue an element\n");
+        printf("2. Dequeue an element\n");
+        printf("3. Peek at the front element\n");
+        printf("4. Display queue\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the value to enqueue: ");
+                scanf("%d", &value);
+                enqueue(&queue, value);
+                break;
+            case 2:
+                value = dequeue(&queue);
+                if (value != -1) {
+                    printf("Dequeued value: %d\n", value);
+                }
+                break;
+            case 3:
+                value = peek(&queue);
+                if (value != -1) {
+                    printf("Front element: %d\n", value);
+                }
+                break;
+            case 4:
+                display(&queue);
+                break;
+            case 5:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}

@@ -1,0 +1,77 @@
+#include stdio.h
+
+void deleteElement(int arr[], int size) {
+    int deleteIndex;
+    printf(Enter The Index for deletion );
+    scanf(%d, &deleteIndex);
+    if (deleteIndex  0  deleteIndex = size) {
+        printf(Invalid index for deletion!n);
+        return;
+    }
+    for (int i = deleteIndex; i  size - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
+    (size)--;
+    printf(Updated Array After Deletion n);
+    for (int i = 0; i  size; i++) {
+        printf(%dn, arr[i]);
+    }
+}
+
+void insertElement(int arr[], int size) {
+    int insertIndex, insertValue;
+    printf(Enter The Index For Insertion );
+    scanf(%d, &insertIndex);
+    if (insertIndex  0  insertIndex  size) {
+        printf(Invalid index for insertion!n);
+        return;
+    }
+    printf(Enter The Value to Insert );
+    scanf(%d, &insertValue);
+    for (int i = (size); i  insertIndex; i--) {
+        arr[i] = arr[i - 1];
+    }
+    arr[insertIndex] = insertValue;
+    (size)++;
+    printf(Updated Array After Insertion n);
+    for (int i = 0; i  (size); i++) {
+        printf(%dn, arr[i]);
+    }
+}
+
+int main() {
+    int size;
+    printf(Enter Size of Array );
+    scanf(%d, &size);
+    int array[size];
+    printf(Enter elements n);
+    for (int i = 0; i  size; i++) {
+        printf(Enter element %d , i + 1);
+        scanf(%d, &array[i]);
+    }
+
+    int choice;
+    do {
+        printf(nMenun);
+        printf(1. Insert Elementn);
+        printf(2. Delete Elementn);
+        printf(3. Exitn);
+        printf(Enter your choice );
+        scanf(%d, &choice);
+        switch (choice) {
+            case 1
+                insertElement(array, &size);
+                break;
+            case 2
+                deleteElement(array, &size);
+                break;
+            case 3
+                printf(“END..n);
+                break;
+            default
+                printf(Invalid Choice!n);
+                break;
+        }
+    } while (choice != 3);
+    return 0;
+}

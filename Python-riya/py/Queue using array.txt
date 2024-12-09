@@ -1,0 +1,88 @@
+#include<stdio.h> 
+int F= -1, R = -1 , Max, queue[100]; 
+void insert(); 
+void Delete(); 
+void display(); 
+ 
+void main() 
+{ 
+int ch; 
+printf("Brahma Bathija \n Roll No:73\n"); 
+printf("Enter the size of Queue\n"); 
+scanf("%d", &Max); 
+printf("Operations which you can perform using queue\n"); 
+printf(" 1.Insert\n 2.Delete\n 3.Display\n 4.Exit\n"); 
+while(ch!= 4) 
+{ 
+printf("Enter Your 
+Choice\n"); scanf("%d", 
+&ch); 
+switch(ch) 
+{ 
+case 1: 
+insert(); 
+break; 
+ 
+case 2: 
+Delete(); 
+break; 
+ 
+case 3: 
+display(); 
+break; 
+case 4: 
+printf("Exited\n"); 
+break; 
+default: 
+printf("Invalid Operation\n"); break; 
+} 
+} 
+} 
+void insert() 
+{ 
+int val; 
+printf("Enter the Value to Insert\n"); 
+scanf("%d", &val); 
+if(F== -1 && R== -1) 
+{ 
+F= 0; 
+R= 0; 
+queue[R]= val; 
+} 
+else if(R== Max-1) 
+{ 
+printf("Overflow\n"); 
+} 
+else 
+{ 
+R++; 
+queue[R]= val; 
+} 
+} 
+void Delete() 
+{ 
+int val; 
+if( F== -1 && R== -1) 
+{ 
+printf("Underflow\n"); 
+} 
+else if(F== R) 
+{ 
+F= -1; 
+R= -1; 
+printf("Value Deleted\n"); 
+} 
+else{ 
+F++; 
+printf("Value Deleted\n"); 
+} 
+} 
+void display() 
+{ 
+int i; 
+printf("Your Queue 
+is\n"); for(i= F;i<= R;i++) 
+{ 
+printf("%d\n", queue[i]); 
+} 
+}
